@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
-      changelog: ${{ steps.changelog.outputs.changelog }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -50,6 +49,12 @@ jobs:
           git commit -m "chore(release): ${{ github.ref_name }}" || true
           git push origin HEAD:main
 
+      - name: Upload manifest as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: manifest
+          path: manifest.json
+
       - name: Upload changelog as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -65,23 +70,28 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
-            archive: tar.gz
+            platform: linux-x64
           - target: aarch64-unknown-linux-gnu
             os: ubuntu-latest
-            archive: tar.gz
+            platform: linux-arm64
           - target: x86_64-apple-darwin
             os: macos-latest
-            archive: tar.gz
+            platform: darwin-x64
           - target: aarch64-apple-darwin
             os: macos-latest
-            archive: tar.gz
+            platform: darwin-arm64
           - target: x86_64-pc-windows-msvc
             os: windows-latest
-            archive: zip
+            platform: win-x64
 
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download manifest artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: manifest
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -109,23 +119,27 @@ jobs:
         run: cargo build --release --target ${{ matrix.target }}
 
       - name: Package (unix)
-        if: matrix.archive == 'tar.gz'
+        if: runner.os != 'Windows'
         run: |
-          cd target/${{ matrix.target }}/release
-          tar czf ../../../${{ env.BINARY_NAME }}-${{ needs.prepare.outputs.version }}-${{ matrix.target }}.tar.gz ${{ env.BINARY_NAME }}
+          mkdir staging
+          cp target/${{ matrix.target }}/release/${{ env.BINARY_NAME }} staging/
+          cp manifest.json staging/
+          cd staging && zip -r ../duckdb-plugin-${{ matrix.platform }}.zip .
 
       - name: Package (windows)
-        if: matrix.archive == 'zip'
+        if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          Compress-Archive -Path "target/${{ matrix.target }}/release/${{ env.BINARY_NAME }}.exe" `
-            -DestinationPath "${{ env.BINARY_NAME }}-${{ needs.prepare.outputs.version }}-${{ matrix.target }}.zip"
+          New-Item -ItemType Directory -Force -Path staging
+          Copy-Item "target\${{ matrix.target }}\release\${{ env.BINARY_NAME }}.exe" staging\
+          Copy-Item "manifest.json" staging\
+          Compress-Archive -Path "staging\*" -DestinationPath "duckdb-plugin-${{ matrix.platform }}.zip"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.BINARY_NAME }}-${{ matrix.target }}
-          path: ${{ env.BINARY_NAME }}-${{ needs.prepare.outputs.version }}-${{ matrix.target }}.*
+          name: duckdb-plugin-${{ matrix.platform }}
+          path: duckdb-plugin-${{ matrix.platform }}.zip
 
   # ── 3. Create GitHub Release ───────────────────────────────────────
   release:
@@ -148,5 +162,5 @@ jobs:
         with:
           name: ${{ github.ref_name }}
           body_path: CHANGELOG.md
-          files: artifacts/*
+          files: artifacts/*.zip
           generate_release_notes: false
