@@ -2,8 +2,7 @@
   <img src="https://raw.githubusercontent.com/debba/tabularis/main/public/logo-sm.png" width="120" height="120" />
 </div>
 
-# tabularis-plugin-duckdb
-
+# tabularis-duckdb-plugin
 <p align="center">
 
 ![](https://img.shields.io/github/release/debba/tabularis-plugin-duckdb.svg?style=flat)
