@@ -914,50 +914,47 @@ fn execute_query(
             "rows": [],
             "affected_rows": affected,
             "truncated": false,
+            "has_more": false,
             "pagination": null,
         }));
     }
 
-    // SELECT with pagination
+    // SELECT with pagination — LIMIT +1 trick (no COUNT query)
     if let Some(l) = limit {
         let page = if page == 0 { 1 } else { page };
         let offset = (page - 1) * l;
-
-        let count_query = format!(
-            "SELECT COUNT(*) FROM ({}) AS __count_subq__",
-            query
-        );
-        let total_rows: u64 = conn
-            .prepare(&count_query)
-            .and_then(|mut s| s.query_row([], |r| r.get::<_, i64>(0)))
-            .map(|n| n as u64)
-            .unwrap_or(0);
 
         let order_by = extract_order_by(query);
         let paginated_query = if !order_by.is_empty() {
             let inner = remove_order_by(query);
             format!(
                 "SELECT * FROM ({}) AS __page_subq__ {} LIMIT {} OFFSET {}",
-                inner, order_by, l, offset
+                inner, order_by, l + 1, offset
             )
         } else {
             format!(
                 "SELECT * FROM ({}) AS __page_subq__ LIMIT {} OFFSET {}",
-                query, l, offset
+                query, l + 1, offset
             )
         };
 
-        let (columns, rows_data) = run_select(conn, &paginated_query)?;
+        let (columns, mut rows_data) = run_select(conn, &paginated_query)?;
+        let has_more = rows_data.len() > l as usize;
+        if has_more {
+            rows_data.truncate(l as usize);
+        }
 
         return Ok(json!({
             "columns": columns,
             "rows": rows_data,
             "affected_rows": 0,
-            "truncated": false,
+            "truncated": has_more,
+            "has_more": has_more,
             "pagination": {
                 "page": page,
                 "page_size": l,
-                "total_rows": total_rows,
+                "total_rows": null,
+                "has_more": has_more,
             },
         }));
     }
@@ -969,6 +966,7 @@ fn execute_query(
         "rows": rows_data,
         "affected_rows": 0,
         "truncated": false,
+        "has_more": false,
         "pagination": null,
     }))
 }
