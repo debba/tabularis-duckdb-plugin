@@ -5,9 +5,9 @@
 # tabularis-duckdb-plugin
 <p align="center">
 
-![](https://img.shields.io/github/release/debba/tabularis-plugin-duckdb.svg?style=flat)
-![](https://img.shields.io/github/downloads/debba/tabularis-plugin-duckdb/total.svg?style=flat)
-![Build & Release](https://github.com/debba/tabularis-plugin-duckdb/workflows/Release/badge.svg)
+![](https://img.shields.io/github/release/debba/tabularis-duckdb-plugin.svg?style=flat)
+![](https://img.shields.io/github/downloads/debba/tabularis-duckdb-plugin/total.svg?style=flat)
+![Build & Release](https://github.com/debba/tabularis-duckdb-plugin/workflows/Release/badge.svg)
 [![Discord](https://img.shields.io/discord/1470772941296894128?color=5865F2&logo=discord&logoColor=white)](https://discord.gg/YrZPHAwMSG)
 
 </p>
