@@ -8,7 +8,7 @@
 ![](https://img.shields.io/github/release/debba/tabularis-duckdb-plugin.svg?style=flat)
 ![](https://img.shields.io/github/downloads/debba/tabularis-duckdb-plugin/total.svg?style=flat)
 ![Build & Release](https://github.com/debba/tabularis-duckdb-plugin/workflows/Release/badge.svg)
-[![Discord](https://img.shields.io/discord/1470772941296894128?color=5865F2&logo=discord&logoColor=white)](https://discord.gg/YrZPHAwMSG)
+[![Discord](https://img.shields.io/discord/1470772941296894128?color=5865F2&logo=discord&logoColor=white)](https://discord.com/invite/K2hmhfHRSt)
 
 </p>
 
@@ -16,7 +16,7 @@ A [DuckDB](https://duckdb.org/) plugin for [Tabularis](https://github.com/debba/
 
 This plugin enables Tabularis to work with DuckDB databases — both file-based and in-memory — providing full schema inspection, CRUD operations, view management, and DDL generation through a JSON-RPC 2.0 over stdio interface.
 
-**Discord** - [Join our discord server](https://discord.gg/YrZPHAwMSG) and chat with the maintainers.
+**Discord** - [Join our discord server](https://discord.com/invite/K2hmhfHRSt) and chat with the maintainers.
 
 ## Table of Contents
 
