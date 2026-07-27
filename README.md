@@ -68,7 +68,7 @@ If your version of Tabularis supports plugin management, the DuckDB plugin can b
 
 1. Download the latest release for your platform from the [Releases page](https://github.com/debba/tabularis-plugin-duckdb/releases).
 2. Extract the archive.
-3. Copy `tabularis-duckdb-plugin` (or `tabularis-duckdb-plugin.exe` on Windows) and `manifest.json` into the Tabularis plugins directory:
+3. Copy `tabularis-duckdb-plugin` (or `tabularis-duckdb-plugin.exe` on Windows) and `.tabularium` into the Tabularis plugins directory:
 
 | OS | Plugins Directory |
 |---|---|

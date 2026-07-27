@@ -12,7 +12,7 @@ env:
   BINARY_NAME: tabularis-duckdb-plugin
 
 jobs:
-  # ── 1. Prepare: update manifest.json version & generate CHANGELOG ──
+  # ── 1. Prepare: update .tabularium version & generate CHANGELOG ──
   prepare:
     runs-on: ubuntu-latest
     outputs:
@@ -26,10 +26,10 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
-      - name: Update manifest.json version
+      - name: Update .tabularium version
         run: |
-          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v' manifest.json > manifest.tmp.json
-          mv manifest.tmp.json manifest.json
+          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v' .tabularium > manifest.tmp.json
+          mv manifest.tmp.json .tabularium
 
       - name: Generate CHANGELOG.md
         id: changelog
@@ -45,7 +45,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add manifest.json CHANGELOG.md
+          git add .tabularium CHANGELOG.md
           git commit -m "chore(release): ${{ github.ref_name }}" || true
           git push origin HEAD:main
 
@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: manifest
-          path: manifest.json
+          path: .tabularium
 
       - name: Upload changelog as artifact
         uses: actions/upload-artifact@v4
@@ -123,7 +123,7 @@ jobs:
         run: |
           mkdir staging
           cp target/${{ matrix.target }}/release/${{ env.BINARY_NAME }} staging/
-          cp manifest.json staging/
+          cp .tabularium staging/
           cd staging && zip -r ../duckdb-plugin-${{ matrix.platform }}.zip .
 
       - name: Package (windows)
@@ -132,7 +132,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path staging
           Copy-Item "target\${{ matrix.target }}\release\${{ env.BINARY_NAME }}.exe" staging\
-          Copy-Item "manifest.json" staging\
+          Copy-Item ".tabularium" staging\
           Compress-Archive -Path "staging\*" -DestinationPath "duckdb-plugin-${{ matrix.platform }}.zip"
 
       - name: Upload artifact
@@ -146,6 +146,8 @@ jobs:
     needs: [prepare, build]
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout (for the .tabularium manifest asset)
+        uses: actions/checkout@v4
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
@@ -162,5 +164,7 @@ jobs:
         with:
           name: ${{ github.ref_name }}
           body_path: CHANGELOG.md
-          files: artifacts/*.zip
+          files: |
+            artifacts/*.zip
+            .tabularium
           generate_release_notes: false
