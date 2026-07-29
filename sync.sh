@@ -24,8 +24,8 @@ esac
 
 echo "Target plugins directory: $PLUGINS_DIR"
 
-# Process each subdirectory that contains a manifest.json
-manifest="$plugin_src/manifest.json"
+# Process each subdirectory that contains a .tabularium
+manifest="$plugin_src/.tabularium"
 if [[ ! -f "$manifest" ]]; then
   continue
 fi
@@ -34,7 +34,7 @@ plugin_id=$(grep -o '"id"\s*:\s*"[^"]*"' "$manifest" | head -1 | sed 's/.*: *"\(
 executable=$(grep -o '"executable"\s*:\s*"[^"]*"' "$manifest" | head -1 | sed 's/.*: *"\(.*\)"/\1/')
 
 if [[ -z "$plugin_id" || -z "$executable" ]]; then
-  echo "  [SKIP] $plugin_src — could not parse manifest.json" >&2
+  echo "  [SKIP] $plugin_src — could not parse .tabularium" >&2
   continue
 fi
 
@@ -51,8 +51,8 @@ dest_dir="$PLUGINS_DIR/$plugin_id"
 mkdir -p "$dest_dir"
 
 # Copy manifest
-cp "$manifest" "$dest_dir/manifest.json"
-echo "  Copied manifest.json"
+cp "$manifest" "$dest_dir/.tabularium"
+echo "  Copied .tabularium"
 
 # Find and copy the compiled executable
 # Look in the plugin's own target/release first, then the workspace target/release
