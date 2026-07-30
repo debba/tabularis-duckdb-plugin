@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] - 2026-07-30
+
+### Bug Fixes
+
+- *(manifest)* Satisfy the Tabularium driver-kind contract (#4) by @NewtTheWolf in [#4](https://github.com/TabularisDB/tabularis-duckdb-plugin/pull/4)
+
+### Documentation
+
+- Fix Discord shields.io badge server id by @debba
+
+### Features
+
+- Migrate to the .tabularium manifest for the Tabularium registry by @NewtTheWolf
+
+### Miscellaneous
+
+- Switch Discord invite URL to discord.com/invite/K2hmhfHRSt by @debba
 ## [0.1.0] - 2026-02-23
 
 ### Documentation
