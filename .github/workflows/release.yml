@@ -54,6 +54,7 @@ jobs:
         with:
           name: manifest
           path: .tabularium
+          include-hidden-files: true
 
       - name: Upload changelog as artifact
         uses: actions/upload-artifact@v4
