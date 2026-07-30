@@ -1,9 +1,12 @@
 {
-  "id": "duckdb",
-  "name": "DuckDB",
-  "version": "0.2.0",
+  "name": "duckdb",
+  "version": "0.2.1",
+  "kind": "driver",
   "description": "DuckDB local database",
-  "default_port": null,
+  "engine": "duckdb",
+  "paradigms": [
+    "sql"
+  ],
   "executable": "tabularis-duckdb-plugin",
   "capabilities": {
     "schemas": false,
