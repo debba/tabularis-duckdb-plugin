@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 - *(manifest)* Satisfy the Tabularium driver-kind contract (#4) by @NewtTheWolf in [#4](https://github.com/TabularisDB/tabularis-duckdb-plugin/pull/4)
+- *(ci)* Keep .tabularium when uploading the manifest artifact by @NewtTheWolf
 
 ### Documentation
 
