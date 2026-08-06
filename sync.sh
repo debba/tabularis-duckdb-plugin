@@ -30,7 +30,8 @@ if [[ ! -f "$manifest" ]]; then
   continue
 fi
 
-plugin_id=$(grep -o '"id"\s*:\s*"[^"]*"' "$manifest" | head -1 | sed 's/.*: *"\(.*\)"/\1/')
+# Canonical manifests use `name` as the plugin identity.
+plugin_id=$(grep -o '"name"\s*:\s*"[^"]*"' "$manifest" | head -1 | sed 's/.*: *"\(.*\)"/\1/')
 executable=$(grep -o '"executable"\s*:\s*"[^"]*"' "$manifest" | head -1 | sed 's/.*: *"\(.*\)"/\1/')
 
 if [[ -z "$plugin_id" || -z "$executable" ]]; then
