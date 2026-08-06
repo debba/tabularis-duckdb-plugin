@@ -3,6 +3,7 @@
   "version": "0.2.1",
   "kind": "driver",
   "description": "DuckDB local database",
+  "icon": "https://raw.githubusercontent.com/TabularisDB/tabularis-duckdb-plugin/main/duckdb-logo.png",
   "engine": "duckdb",
   "paradigms": [
     "sql"
