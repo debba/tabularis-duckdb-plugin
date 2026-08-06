@@ -91,7 +91,9 @@ jobs:
             os: macos-latest
             platform: darwin-arm64
           - target: x86_64-pc-windows-msvc
-            os: windows-latest
+            # windows-latest now ships MSVC 14.5x, which fails to compile the
+            # bundled duckdb sources; pin to the older toolset.
+            os: windows-2022
             platform: win-x64
 
     runs-on: ${{ matrix.os }}
