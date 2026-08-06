@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.2.1] - 2026-07-30
+## [0.2.1] - 2026-08-06
 
 ### Bug Fixes
 
@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - Migrate to the .tabularium manifest for the Tabularium registry by @NewtTheWolf
+- Catalogue icon, per-version release notes, manifest asset fix by @debba
 
 ### Miscellaneous
 
